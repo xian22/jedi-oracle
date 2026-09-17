@@ -115,6 +115,11 @@ and `external/icepack/Icepack`, built by SOCA's CMake as libraries
 
 ## Gotchas
 
+- **SABER class renames applied (2026-09, soca#1258):** soca's SABER
+  blocks were updated for saber#1288, which dropped the `Saber` prefix
+  from SABER class names (e.g. `SaberOuterBlockBase` → `OuterBlockBase`).
+  Affects `ParametricOceanStdDev` and the other blocks under
+  `src/soca/SaberBlocks/`. See `jedi-knowledge/saber.md`.
 - **Recursive clone is required.** A non-recursive clone leaves
   `external/` submodules empty and the build fails.
 - **There is no MOM6 `oops::Model` wrapper.** The only Model in the

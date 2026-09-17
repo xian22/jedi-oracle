@@ -153,6 +153,22 @@ The library provides:
 
 ## Gotchas
 
+- **OSDF reader fill-value fix (2026-09, ioda#1867):** the missing
+  `getNcVarDefaultFillValue` specialisation for `char` was added, plus a
+  compile-time guard so other data types can no longer fall through to the
+  `int` specialisation implicitly. This was what broke `ufo_superob` and
+  `ufo_superob_PE4` under the OSDF reader. New coverage in
+  `test/reader/ReaderFillValue.h` and
+  `test/mains/reader/TestReaderFillValue.cc` (fixture from ioda-data#258).
+- **`ObsSpace.h` and `ObsVector.h` slimmed (2026-09, ioda#1852, #1868):**
+  both headers shed includes. Downstream code that relied on picking up
+  transitive includes through them may now fail to compile — add the
+  include you actually use.
+- **Test-fixture container settings (2026-09, ioda#1861, #1866, #1859):**
+  local test fixtures gained a global container-setting hook, paired
+  container tests had their YAML differences cleaned up, and an
+  `observers` node was inserted into the test YAMLs. Relevant if you
+  maintain ioda ctests or the OSDF/classic paired tests.
 - IODA files are HDF5 with specific group/variable conventions —
   arbitrary HDF5 files won't work. Use `iodaconv` outputs or another
   IODA-aware tool.

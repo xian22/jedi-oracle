@@ -26,6 +26,10 @@ The bundle clones it `RECURSIVE`, so submodules come along.
 
 ## Gotchas
 
+- **Interpolator interface updated (2026-09, pyiri-jedi#185):**
+  `src/pyiri-jedi/Model/InterpolatorPyiri.h` was adapted to oops#3333,
+  which moved the interpolator caches out of `GeometryData`. See
+  `jedi-knowledge/oops.md`.
 - Recursive clone — submodules pull additional code; expect a longer
   clone.
 - Python interpreter dependency — be sure your build environment's

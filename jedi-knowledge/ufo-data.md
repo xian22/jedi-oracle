@@ -6,7 +6,7 @@
 
 ## What it is
 
-A pure data repo (project version 1.10.0). The CMakeLists declares an
+A pure data repo (project version 1.13.0). The CMakeLists declares an
 `ecbuild_install_project`; content lives under `testinput_tier_1/`. The
 bundle defines `ENABLE_UFO_DATA` (default ON) which controls whether UFO
 tests take their data from this repo or from a downloaded tarball — note
@@ -14,9 +14,10 @@ the bundle clones the repo unconditionally either way.
 
 This is the largest of the data sidecars — UFO's test matrix covers many
 instruments and operator variants, so the fixture set is
-correspondingly large (~814 files at last scan).
+correspondingly large (~690 files at last scan).
 
-Also at top level: `update_part2.py`, a small netCDF helper used when
+Also at top level: `CI/` (CodeBuild buildspec, `clone.sh`, CDash glue for
+this repo's own CI) and `update_part2.py`, a small netCDF helper used when
 bulk-renaming variables in data files.
 
 ## How it fits into the bundle
@@ -57,6 +58,11 @@ bulk-renaming variables in data files.
 - **Large GNSSRO files deleted (2026-05, ufo-data#562):** oversized
   GNSSRO geoval files were removed in favor of smaller variants; old UFO
   branches whose test YAMLs reference the deleted names will fail.
+- **Met Office surface-cloud fixtures rewritten (2026-09, ufo-data#596):**
+  `met_office_surfacecloud_cloud_base_height_check.nc4` and
+  `met_office_surfacecloud_cloud_column_check.nc4` had their 1-D variables
+  removed where they collided with a same-named 2-D variable. A UFO branch
+  that still reads the 1-D form of those variables will fail to find them.
 - Recent additions track new UFO obsfunctions (`LinearTimeInterpolate`,
   `Statistic`, `TimeBinner`, `CircularDifference`, vertical smoothing) —
   if a brand-new UFO test can't find its data, pull this repo too.

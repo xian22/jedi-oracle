@@ -80,6 +80,10 @@ are imported by EWOK's plotting and evaluation runtime tasks, and whose
 
 ## Gotchas
 
+- **Plotting and naming updates (2026-09):** longer timeseries now get a
+  legible x-axis (simobs#409); GNSSRO writes one logfile per satellite
+  (#405); names with gnssro and snake_case qualifiers are accepted (#407);
+  additional `insitu_2d` data types recognised (#385).
 - The README is effectively empty — the canonical reference is the Python
   source in `src/simobs/plotting/` and the EWOK runtime scripts that call
   it.

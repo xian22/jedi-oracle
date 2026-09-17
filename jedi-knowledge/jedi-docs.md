@@ -94,6 +94,13 @@ There is no `source/` subdirectory — `.rst` files live directly under
 
 ## Gotchas
 
+- **New pages (2026-09):** `saber/blocks/BUMP_nicas_estimation.rst`
+  (BUMP HDIAG, jedi-docs#1085) and
+  `ufo/qcfilters/obsfunctions/PotentialTemperatureFromTemperature.rst`
+  (jedi-docs#883). Also landed: TLAD equations for the AOD mass-fraction
+  UFO operator (#1079), a variable-groupings example for the diffusion
+  block (#1096), and vertical localization for the sequential EnKF
+  (#1031).
 - **The docs lag the code.** jedi-docs is updated by hand and is often a
   release or more behind what's in the cloned source repos. Treat it as
   orientation, then verify behavior/options against the actual code (and

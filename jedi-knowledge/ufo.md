@@ -139,6 +139,15 @@ This is the largest and most actively-developed JEDI repo by file count.
 
 ## Gotchas
 
+- **RTTOV wind speed+direction fallback had u/v swapped (2026-09,
+  ufo#4312):** the fallback that decomposes wind speed + direction
+  GeoVaLs into components used `u = w*cos(wdir)`, `v = w*sin(wdir)`.
+  `var_sfc_wdir` is the azimuth the wind blows *toward*, clockwise from
+  north (the convention `uv_to_wdir` produces and CRTM consumes), so the
+  correct decomposition is `u = w*sin`, `v = w*cos`. The old form
+  reflected the wind vector across the NE-SW diagonal. Both the `s2m` and
+  `near_surface` paths were affected. Any RTTOV run that went through the
+  speed+direction fallback before 2026-09-04 has wrong surface winds.
 - Filter and obs-localization factories register via
   `instantiate*Factory.h`; operators and obs functions register via
   static makers in their own `.cc`. If a new class isn't found at
