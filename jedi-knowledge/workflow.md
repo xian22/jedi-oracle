@@ -115,6 +115,19 @@ So a "skylab experiment" is really skylab+ewok+r2d2 invoking the
 bundle's executables in a defined order with carefully managed inputs
 and outputs, with simobs rendering the results.
 
+## Recent cross-repo changes
+
+- **WeatherBench scoring reworked (2026-09, skylab#954 + ewok#1298).**
+  A paired change: ewok's `src/runtime/saveScoresWBRun.py` and test defs
+  on one side, and on the other skylab's new
+  `eval/eval_weatherbench_gfs.yaml`, `eval/eval_weatherbench_mpas.yaml`
+  and `eval/observation_space_default.yaml`. Because it spans both repos,
+  update skylab and ewok together — a mismatched pair will fail at the
+  scoring task.
+- **ERA5 MARS/CDS ingest for MPAS (2026-09, skylab#972).** A second ERA5
+  fetch route alongside the OSDF-hosted one. See `jedi-knowledge/skylab.md`.
+- **simobs plotting and naming updates (2026-09).** See `jedi-knowledge/simobs.md`.
+
 ## Further reading
 
 - https://jedi-docs.jcsda.org/ → Inside JEDI → Skylab.

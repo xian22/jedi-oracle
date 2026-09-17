@@ -27,17 +27,25 @@ workflow stack itself.
 
 - `buildscripts/` — the most-used part of the repo:
   - `setup.sh` — source it to configure a JEDI-Skylab environment. Edit the
-    user variables at the top: `JEDI_ROOT`, `JEDI_WORKFLOW`, `HOST`,
-    `COMPILER` (intel/gnu/clang/oneapi), `R2D2_USER`, `R2D2_API_KEY`.
-    `source setup.sh -s` loads only the compile environment; `-h` for help.
+    user variables at the top: `JEDI_ROOT`, `HOST`, `COMPILER`,
+    `R2D2_USER`, `R2D2_API_KEY`, plus optional `WORKFLOW_ROOT` (defaults to
+    `JEDI_ROOT`). Everything else is derived and exported for you —
+    `JEDI_SRC=${JEDI_ROOT}/jedi-bundle`, `JEDI_BUILD=${JEDI_ROOT}/build`,
+    `JEDI_WORKFLOW=${WORKFLOW_ROOT}/jedi-workflow`, `EWOK_WORKDIR`,
+    `EWOK_FLOWDIR`. `source setup.sh -s` loads only the compile
+    environment; `-h` for help.
     Header (updated Jan 2026) lists Skylab-capable hosts (localhost,
-    derecho, discover-mil, ec2, hercules, orion, …) vs load-only hosts
-    (gaea_c6, hera, narwhal, nautilus, pw-aws/azure/gcloud, s4 — several
+    derecho, discover-mil, ec2, hercules, orion, s4) vs load-only hosts
+    (gaea_c6, hera, narwhal, nautilus, pw-aws/azure/gcloud — several
     marked end-of-support).
   - `setup/<host>_setup_<compiler>.sh` — per-host module/spack-stack load
-    scripts that `setup.sh` dispatches to (currently spack-stack 2.x era).
-  - `build_jedi_skylab.sh` (`--build-jobs N`), `build_workflow_apps.sh`,
-    `check_in_venv.py`.
+    scripts that `setup.sh` dispatches to (spack-stack 2.1 era). Valid
+    compilers are **`gcc`, `oneapi`, `clang`**; `intel` survives only as
+    `derecho_setup_intel.sh` and `hercules_setup_intel.sh` (intel classic
+    is deprecated after spack-stack 1.8.0). An `aspire_setup_gcc.sh` exists
+    but `aspire` is not yet listed in the `setup.sh` header.
+  - `build_jedi_skylab.sh` (`--build-jobs N`, `--help`; auto-estimates the
+    job count otherwise), `build_workflow_apps.sh`, `check_in_venv.py`.
   - `compiling/` — older standalone intel build scripts.
 - `AWS/` — cloud tooling:
   - `ec2/launch_ec2.py` — launch single EC2 dev instances from
@@ -109,6 +117,18 @@ workflow stack itself.
 - Some content is admin-facing documentation-of-record (crontabs, CDash,
   ParallelWorks) rather than user tooling — the CDash README itself warns
   it may be stale.
+- **`gnu` is no longer a compiler name (2026, jedi-tools#501):** every
+  `setup/<host>_setup_gnu.sh` was renamed to `..._setup_gcc.sh` and
+  `setup.sh` now asks for gcc/oneapi/clang. An existing config with
+  `COMPILER=gnu` fails the "no setup script for this HOST/COMPILER" check —
+  change it to `gcc`. The same round of cleanup deleted the `jet` and
+  `gaea_c5` setup scripts.
+- **Build tree now honours `$JEDI_BUILD` (2026-07, jedi-tools#532):**
+  `build_jedi_skylab.sh` used to hardcode `cd ${JEDI_ROOT}; mkdir -p build`;
+  it now does `mkdir -p ${JEDI_BUILD}` and requires the variable to be set
+  (it exits if `setup.sh` wasn't sourced). The default value is unchanged,
+  so out-of-the-box behaviour is the same — but you can now point the build
+  somewhere other than `${JEDI_ROOT}/build`.
 - **R2D2 server localhost install reworked (2026-06, jedi-tools#473):**
   `build_workflow_apps.sh` now treats the `r2d2` repo (the server) as a
   first-class member of `SKYLAB_REPOS` — cloned alongside the others when

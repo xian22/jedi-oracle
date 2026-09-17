@@ -145,6 +145,19 @@ platform for new algorithms before they are wired into operational models.
 
 ## Gotchas
 
+- **Interpolator caches moved out of `GeometryData` (2026-09, oops#3333):**
+  `src/oops/base/GeometryData` shed ~539 lines. The interpolator-related
+  caching now lives in new generic components:
+  `src/oops/generic/MeshTriangulation.{h,cc}`,
+  `ProximitySearch.{h,cc}` and `SourceProximityPartitioner.{h,cc}`.
+  Model interfaces that reached into `GeometryData` for interpolation
+  internals must be updated — `jedi-knowledge/saber.md` (saber#1303) and
+  `jedi-knowledge/pyiri-jedi.md` (pyiri-jedi#185) already were.
+- **Common Parameter types explicitly instantiated (2026-09, oops#3382):**
+  `src/oops/util/parameters/ParameterInstantiations.cc` adds explicit
+  instantiations of the common `Parameter`/`ParameterTraits` types to cut
+  compile time. If you add a new Parameter type and hit a link error,
+  check whether it needs an entry there.
 - OOPS requires `NETCDF4_PARALLEL` — a serial-only NetCDF build fails
   configure with `Missing PARALLEL feature for NetCDF`.
 - Heavy template use; compile errors can be huge. Build the toy models

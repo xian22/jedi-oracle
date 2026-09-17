@@ -104,6 +104,18 @@ siblings — i.e. `jedi-workflow/` in this oracle layout.
 
 ## Gotchas
 
+- **ERA5 can now be ingested via CDS API / MARS (2026-09, skylab#972):**
+  `models/mpas/tasks/runFetchBackgroundMPAS-cdsapi.py` (625 lines) adds a
+  second ERA5 route for MPAS alongside the existing OSDF-hosted pull from
+  `data-osdf.rda.ucar.edu` in `fetchBackgroundMPAS.py`. It checks for
+  static files first and uses the F320 grid to match NCAR. Note this is
+  the Open Science Data Federation sense of "OSDF" — unrelated to the
+  IODA data-frame container configured by `osdf_io_pool`.
+- **New experiment and eval configs (2026-09):**
+  `experiments/skylab-mpas-ref.yaml`, plus
+  `eval/eval_weatherbench_gfs.yaml`, `eval/eval_weatherbench_mpas.yaml`
+  and `eval/observation_space_default.yaml` from the weatherbench score
+  rework (skylab#954, paired with ewok#1298).
 - Skylab YAMLs resolve `!ENV` references against `$JEDI_WORKFLOW`,
   `$EWOK_WORKDIR`, `$EWOK_FLOWDIR`, and (for static B / fix files)
   `$EWOK_STATIC_DATA`; EWOK additionally needs `$JEDI_SRC` and

@@ -37,11 +37,14 @@ response) without needing a full atmospheric model.
     `ProcessPerts.h`, plus the `instantiateCovarFactory.h` /
     `instantiateLocalizationFactory.h` that downstream code calls to
     register blocks.
-  - `blocks/` — the block-chain framework: `SaberBlockChainBase`,
-    `SaberOuterBlockBase`, `SaberCentralBlockBase`,
-    `SaberBlockParametersBase`, `SaberOuterBlockChain`,
-    `SaberEnsembleBlockChain`, `SaberHybridBlockChain` (header-only),
-    `SaberParametricBlockChain`, `instantiateBlockChainFactory.h`.
+  - `blocks/` — the block-chain framework: `BlockChainBase`,
+    `OuterBlockBase`, `CentralBlockBase`, `CentralBlockWrapper`
+    (multivariate-strategy handling),
+    `BlockParametersBase`, `OuterBlockChain`,
+    `EnsembleBlockChain`, `HybridBlockChain` (header-only),
+    `ParametricBlockChain`, `instantiateBlockChainFactory.h`.
+    Note these classes dropped their `Saber` prefix in 2026-09 — see
+    **Gotchas**.
   - `bump/` — the BUMP library (Background error on an Unstructured
     Mesh, Benjamin Ménétrier). Core blocks: `NICAS` (correlation),
     `StdDev`, `VerticalBalance`, `PsiChiToUV`, `NICASFilter`. Heavy use
@@ -111,10 +114,10 @@ response) without needing a full atmospheric model.
   blocks into a JEDI Variational application.
 - `src/saber/oops/instantiateCovarFactory.h` — the registration call
   models add to register all SABER blocks with OOPS.
-- `src/saber/blocks/SaberOuterBlockBase.h`, `SaberCentralBlockBase.h` —
+- `src/saber/blocks/OuterBlockBase.h`, `CentralBlockBase.h` —
   base classes for adding a new block.
-- `src/saber/blocks/SaberOuterBlockChain.cc`,
-  `SaberParametricBlockChain.cc`, `SaberHybridBlockChain.h` — how
+- `src/saber/blocks/OuterBlockChain.cc`,
+  `ParametricBlockChain.cc`, `HybridBlockChain.h` — how
   blocks compose into a full B.
 - `src/saber/bump/BUMP.h`, `NICAS.h`, `StdDev.h` — the most widely used
   parametric covariance blocks.
@@ -132,13 +135,13 @@ response) without needing a full atmospheric model.
   (`-DENABLE_QUENCH=ON`, default), then run
   `quenchErrorCovarianceToolbox <yaml>`. Tutorial YAMLs are in
   `docs/yaml/`.
-- **Add a new outer block** — derive from `SaberOuterBlockBase`,
+- **Add a new outer block** — derive from `OuterBlockBase`,
   register with a static maker, e.g.
-  `static SaberOuterBlockMaker<MyBlock> maker_("my block name");`
+  `static OuterBlockMaker<MyBlock> maker_("my block name");`
   (template: `src/saber/generic/ID.cc`), drop sources into a subdir of
   `src/saber/`, list them in that subdir's `CMakeLists.txt`.
 - **Add a new central block** — same pattern with
-  `SaberCentralBlockBase` and `SaberCentralBlockMaker<>` (template:
+  `CentralBlockBase` and `CentralBlockMaker<>` (template:
   `src/saber/spectralb/SpectralCovariance.cc`).
 - **Plot dirac responses** — `tools/saber_plot.py` /
   `tools/saber_plot/`.
@@ -148,6 +151,37 @@ response) without needing a full atmospheric model.
 
 ## Gotchas
 
+- **SABER classes renamed (2026-09, saber#1288):** the `Saber` prefix
+  was dropped from class and file names, since they already live in
+  `namespace saber`. `SaberOuterBlockBase` → `OuterBlockBase`,
+  `SaberEnsembleBlockChain` → `EnsembleBlockChain`,
+  `SaberHybridBlockChain` → `HybridBlockChain`,
+  `SaberParametricBlockChain` → `ParametricBlockChain`, and notably
+  `SaberCentralBlock` → **`CentralBlockWrapper`** (not
+  `CentralBlock`). Files were renamed to match. The full mapping is
+  checked in at `tools/rename_classes.py`. **YAML is unaffected** —
+  `saber central block`, `saber outer blocks`, `multivariate strategy`,
+  `scales` and `multiscale strategy` all keep their names. The rename
+  also landed in soca (soca#1258). Any notes or review comments citing
+  SABER paths from before 2026-09-10 point at files that no longer exist.
+- **`multivariate strategy` has five values, not four.** `single` is the
+  **default** (`blocks/CentralBlockWrapper.h`), alongside `univariate`,
+  `duplicated`, `duplicated and weighted` and `crossed` (validated in
+  `CentralBlockWrapper.cc`). `single` requires a single variable group;
+  it errors if `groups` has more than one entry.
+- **New `GeographicalMask` outer block (2026-09, saber#1272):**
+  `src/saber/generic/GeographicalMask.{h,cc}`, registered as
+  `saber block name: GeographicalMask`. Configured with a `masks` list
+  (each entry taking `suffix`, `relational operator`, `threshold`), an
+  optional `mask variable`, and `read` / `calibration` sections for
+  mask and weight file I/O.
+- **ShadowLevels refactored (2026-09, saber#1271):** `generic/ShadowLevels`
+  reworked and its setup simplified. Test YAMLs renamed
+  `dirac_shadowlevels_N` → `dirac_shadow_levels_N` and the old testrefs
+  deleted, so branches carrying the old names will fail.
+- **Adapted to the new OOPS `GeometryData` (2026-09, saber#1303):**
+  follows oops#3333, which moved the interpolator caches out of
+  `GeometryData`. See `jedi-knowledge/oops.md`.
 - Many block families are conditional on optional deps. Check the
   configure output for "SABER block X is enabled / NOT enabled" lines
   (printed in top-level `CMakeLists.txt`).
@@ -195,8 +229,8 @@ response) without needing a full atmospheric model.
   `test/testinput/process_perts_spectralb_from_gauss_perts_6.yaml` /
   `test/testref/process_perts_spectralb_from_gauss_perts_6.ref`.
 - **Custom partitioner bugfixes (2026-06, saber#1250):** fixes in block-chain
-  partitioning logic in `src/saber/blocks/SaberEnsembleBlockChain` and
-  `SaberParametricBlockChain`.
+  partitioning logic in `src/saber/blocks/EnsembleBlockChain` and
+  `ParametricBlockChain`.
 - **Torch/Python virtual environment unified (2026-06, saber#1207):**
   the torchbalance block and Python tools now share the same virtual
   environment; CI configuration in `.github/workflows/ci.yml` updated.
