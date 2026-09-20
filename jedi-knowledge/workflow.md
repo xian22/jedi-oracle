@@ -127,6 +127,16 @@ and outputs, with simobs rendering the results.
 - **ERA5 MARS/CDS ingest for MPAS (2026-09, skylab#972).** A second ERA5
   fetch route alongside the OSDF-hosted one. See `jedi-knowledge/skylab.md`.
 - **simobs plotting and naming updates (2026-09).** See `jedi-knowledge/simobs.md`.
+- **OSDF multi-file reading landed in ioda (2026-09, ioda#1888).** The
+  container-based reader now accepts the plural
+  `obsdatain.engine.obsfiles` key, which is what ewok's split-obsfile
+  flow already produces. This is the missing piece for running
+  `osdf_io_pool: true` together with `split obsfiles: True` — previously
+  flagged as unsupported in the shipped skylab experiment comments. Worth
+  re-testing that combination. See `jedi-knowledge/ioda.md`.
+- **r2d2 server performance work (2026-09, r2d2#860, #861).** Connection
+  reuse per app context and compound item lookup per experiment. See
+  `jedi-knowledge/r2d2.md`.
 
 ## Further reading
 

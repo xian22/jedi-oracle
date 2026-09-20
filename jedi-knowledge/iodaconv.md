@@ -28,6 +28,8 @@ sondes, etc.) into that IODA layout.
 
 ## Gotchas
 
+- **OSW converter updated for the NOAA-L2 Muon product (2026-09,
+  iodaconv#1810):** `src/hdf5/osw_2ioda.py`.
 - Many converters depend on external libraries (NCEPbufr, eccodes)
   beyond the bundle's standard deps.
 

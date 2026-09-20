@@ -153,6 +153,29 @@ The library provides:
 
 ## Gotchas
 
+- **OSDF reader can read a set of input files (2026-09, ioda#1888):**
+  the container-based reader now handles multiple input files via the
+  existing plural `obsdatain.engine.obsfiles` key — no new YAML option.
+  Touches `src/ObsSpace.cc`, `src/reader/ObsReader.cpp` and
+  `src/reader/load/loadObsFromNetcdf.cpp`. This is the piece that makes
+  the split-obsfile flow viable under OSDF; see
+  `jedi-knowledge/workflow.md` for how skylab/ewok drive it.
+- **Paired container tests now use an environment variable (2026-09,
+  ioda#1880, #1892):** rather than maintaining a duplicate `*_osdf.yaml`
+  beside each test, the same YAML is registered twice with
+  `ENVIRONMENT IODA_TEST_CONTAINER=OSDF`. Use that pattern when adding
+  ioda ctests; `iodatest_obsdatavector_osdf.yaml` was deleted.
+- **Halo distribution disables obs grouping by default (2026-09,
+  ioda#1886):** `DistributionBase` gained an `applyObsGrouping()`
+  predicate and only `Halo` overrides the default of `true`. Under Halo
+  an empty group-variable list is passed to `distributeObs`, so **every
+  location gets its own record** regardless of `obsdatain.obsgrouping`.
+  Halo runs that relied on record grouping will behave differently.
+- **Guard for variables OSDF cannot store (2026-09, ioda#1853):** the
+  reader now throws `eckit::BadValue` naming any netCDF variable that
+  cannot live in an OSDF container — e.g. an `X[Location, Channel]`
+  variable colliding with a registered channel. These used to fail later
+  and less clearly. Reference data in ioda-data#259.
 - **OSDF reader fill-value fix (2026-09, ioda#1867):** the missing
   `getNcVarDefaultFillValue` specialisation for `char` was added, plus a
   compile-time guard so other data types can no longer fall through to the

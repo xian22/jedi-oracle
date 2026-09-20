@@ -91,6 +91,11 @@ Precision follows the `MPAS_DOUBLE_PRECISION` flag set by the bundle
 
 ## Gotchas
 
+- **Tropopause pressure method is configurable again (2026-09,
+  mpas-jedi#1238):** `mpasjedi_vc_model2geovars_mod.F90` had the method
+  hardcoded to `thompson` with the YAML lookup commented out. The
+  `tropopause pressure method` key is read once more and now accepts
+  `thompson` (default) or `wmo`; the WMO branch was un-commented.
 - `mpas-jedi` requires the bundle's `mpas` repo built with the right
   core(s) and matching precision. The current 2-stream I/O test data
   was generated with a **single-precision** MPAS-Model run

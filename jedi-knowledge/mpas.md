@@ -1,7 +1,7 @@
 # mpas (MPAS-Model)
 
 **Repository:** https://github.com/MPAS-Dev/MPAS-Model
-**Pin tracked by bundle:** tag `v8.4.0` (pinned tag, not a branch)
+**Pin tracked by bundle:** tag `v8.4.2` (pinned tag, not a branch)
 **Role in JEDI:** the MPAS atmospheric forecast model itself — the upstream NCAR/LANL MPAS-Atmosphere code that `mpas-jedi` wraps for JEDI integration.
 
 ## What it is
@@ -66,7 +66,8 @@ ship in the upstream repo but the bundle does not build them — see the
 
 ## Gotchas
 
-- **Pinned to a tag, not a branch.** The bundle pins `TAG v8.4.0`
+- **Pinned to a tag, not a branch.** The bundle pins `TAG v8.4.2`
+  (bumped from v8.4.0 in 2026-09, jedi-bundle#160)
   (the official release containing the MPAS-model#1420 fix that an
   earlier commit pin was waiting for). Implications:
   - `/jedi-updateRepos` skips this repo — there is no `develop` to

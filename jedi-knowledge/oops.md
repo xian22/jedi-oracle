@@ -145,6 +145,9 @@ platform for new algorithms before they are wired into operational models.
 
 ## Gotchas
 
+- **`oops::Log::warning()` is now prefixed `OOPS_WARNING` (2026-09,
+  oops#3341).** Log-scraping scripts that matched the old unprefixed
+  warning lines need updating.
 - **Interpolator caches moved out of `GeometryData` (2026-09, oops#3333):**
   `src/oops/base/GeometryData` shed ~539 lines. The interpolator-related
   caching now lives in new generic components:

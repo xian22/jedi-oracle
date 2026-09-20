@@ -37,8 +37,14 @@ This file is tracked. Open a PR to contribute.
 
 - `jedi-tools` requires `git-lfs` to be installed and enabled before cloning.
   Run `git lfs install` once per machine.
-- The `mpas` CMakeLists pin is a commit on `release-v8.4.0`, not a tag —
-  see `jedi-knowledge/mpas.md` for context.
+- The `mpas` CMakeLists pin is a **tag**, not a branch:
+  `ecbuild_bundle( PROJECT MPAS ... TAG vX.Y.Z )`. It is bumped every few
+  months, so read the current value out of `jedi-bundle/CMakeLists.txt`
+  rather than trusting a version written down anywhere else. A local
+  checkout therefore sits at a detached HEAD and pull-based updates skip
+  it — after the bundle moves the pin, re-checkout the new tag by hand
+  (`git -C jedi-bundle/MPAS fetch && git -C jedi-bundle/MPAS checkout vX.Y.Z`).
+  See `jedi-knowledge/mpas.md`.
 
 ## Useful commands
 

@@ -26,6 +26,9 @@ The bundle clones it `RECURSIVE`, so submodules come along.
 
 ## Gotchas
 
+- **numpy 2.0 compatibility (2026-09, pyiri-jedi#199):** fixes in the
+  Python layer for numpy 2.x. If you hit numpy API errors, make sure this
+  commit is in your checkout.
 - **Interpolator interface updated (2026-09, pyiri-jedi#185):**
   `src/pyiri-jedi/Model/InterpolatorPyiri.h` was adapted to oops#3333,
   which moved the interpolator caches out of `GeometryData`. See
