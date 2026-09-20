@@ -26,7 +26,7 @@ the environment before configuring.
 ## How it fits into the bundle
 
 Every other JEDI core repo in `jedi-knowledge/` is a sub-repository of the
-bundle. Authoritative `ecbuild_bundle( PROJECT … )` list as of 2026-06 (all
+bundle. Authoritative `ecbuild_bundle( PROJECT … )` list as of 2026-09 (all
 `jcsda-internal`, `BRANCH develop UPDATE`, unless noted):
 
 **Always built (no option flag), in declaration order:**
@@ -43,30 +43,32 @@ bundle. Authoritative `ecbuild_bundle( PROJECT … )` list as of 2026-06 (all
 | ioda | jcsda-internal/ioda | |
 | ufo-data | jcsda-internal/ufo-data | |
 | ufo | jcsda-internal/ufo | |
-| fv3-jedi-lm | jcsda-internal/fv3-jedi-linearmodel | |
-| fv3-jedi-data | jcsda-internal/fv3-jedi-data | |
-| fv3-jedi | jcsda-internal/fv3-jedi | |
-| soca | jcsda-internal/soca | `RECURSIVE` (submodules) |
-| coupling | jcsda-internal/coupling | |
 
-**Optional, default ON:**
+**Optional, default ON** (so a default configure builds all of these):
 
-- `BUILD_MPAS` (ON) → `mpas` (MPAS-Dev/MPAS-Model, **TAG v8.4.2**),
+- `BUILD_FV3` → `fv3-jedi-lm` (jcsda-internal/fv3-jedi-linearmodel),
+  `fv3-jedi-data`, `fv3-jedi`.
+- `BUILD_SOCA` → `soca` (`RECURSIVE` — submodules).
+- `BUILD_MPAS` → `MPAS` (MPAS-Dev/MPAS-Model, **TAG v8.4.2**),
   `mpas-jedi-data`, `mpas-jedi`. Also sets `MPAS_DOUBLE_PRECISION ON`,
   `MPAS_CORES "init_atmosphere atmosphere"`, `MPAS_OPENMP ON`.
-- `ENABLE_IODA_DATA` (ON), `ENABLE_UFO_DATA` (ON), `ENABLE_FV3_JEDI_DATA`
-  (ON) — get test data from the `*-data` repos instead of tarballs. Note the
-  data repos themselves are cloned unconditionally; these flags only control
-  how the test data is consumed.
+- `BUILD_PYIRI` → `pyiri-jedi` (develop, `RECURSIVE`).
+- **`coupling`** has no flag of its own — it is cloned only when
+  `BUILD_FV3 AND BUILD_SOCA` are both ON.
+- `ENABLE_IODA_DATA` (ON), `ENABLE_UFO_DATA` (ON) — take test data from the
+  `ioda-data` / `ufo-data` repos instead of a tarball. The data repos
+  themselves are cloned unconditionally; these flags only control how the
+  test data is consumed. (There is **no** `ENABLE_FV3_JEDI_DATA` — the
+  fv3-jedi-data clone is governed by `BUILD_FV3`.)
 
 **Optional, default OFF:**
 
-- `BUILD_GSIBEC` → `gsibec` (geos-esm/GSIbec, TAG 1.4.2)
+- `BUILD_GSIBEC` → `gsibec` (geos-esm/GSIbec, TAG 1.4.4)
 - `BUILD_RTTOV` → `rttov` (jcsda-internal/rttov, develop)
 - `BUILD_OASIM` → `oasim` (jcsda-internal/oasim, develop)
 - `BUILD_ROPP` → `ropp-ufo` (jcsda-internal/**ropp-test**, develop)
+- `BUILD_MIST` → `mist` (jcsda-internal/mist, develop)
 - `BUILD_IODA_CONVERTERS` → `iodaconv` (jcsda-internal/ioda-converters, develop)
-- `BUILD_PYIRI` → `pyiri-jedi` (jcsda-internal/pyiri-jedi, develop, `RECURSIVE`)
 
 eckit / fckit / atlas entries exist but are **commented out** — they come
 from the environment (spack-stack), not the bundle.
@@ -122,7 +124,8 @@ from the environment (spack-stack), not the bundle.
   the wrong MPI, look at the bundle-level call first.
 - `mpas` pins **TAG v8.4.2** (bumped 2026-09, PR #160; previously
   v8.4.0 from PR #145). If a local
-  `jedi-bundle/mpas` checkout is older, `git fetch && git checkout v8.4.2`
+  `jedi-bundle/MPAS` checkout is older (note the uppercase directory
+  name — the ecbuild PROJECT is `MPAS`), `git fetch && git checkout v8.4.2`
   before rebuilding.
 - `BUILD_MPAS` was briefly made default-OFF (PR #136) but is **ON** in the
   current `CMakeLists.txt` — always check the file, not memory.
