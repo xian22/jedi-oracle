@@ -51,7 +51,7 @@ bundle. Authoritative `ecbuild_bundle( PROJECT … )` list as of 2026-06 (all
 
 **Optional, default ON:**
 
-- `BUILD_MPAS` (ON) → `mpas` (MPAS-Dev/MPAS-Model, **TAG v8.4.0**),
+- `BUILD_MPAS` (ON) → `mpas` (MPAS-Dev/MPAS-Model, **TAG v8.4.2**),
   `mpas-jedi-data`, `mpas-jedi`. Also sets `MPAS_DOUBLE_PRECISION ON`,
   `MPAS_CORES "init_atmosphere atmosphere"`, `MPAS_OPENMP ON`.
 - `ENABLE_IODA_DATA` (ON), `ENABLE_UFO_DATA` (ON), `ENABLE_FV3_JEDI_DATA`
@@ -113,8 +113,16 @@ from the environment (spack-stack), not the bundle.
 
 ## Gotchas
 
-- `mpas` pins **TAG v8.4.0** (bumped 2026-05, PR #145). If a local
-  `jedi-bundle/mpas` checkout is older, `git fetch && git checkout v8.4.0`
+- **MPI is probed once at bundle scope (2026-09, jedi-bundle#159):**
+  the top-level `CMakeLists.txt` now calls
+  `find_package( MPI COMPONENTS C CXX Fortran )` right after
+  `ecbuild_bundle_initialize()`, so every sub-repo's own
+  `find_package(MPI)` still configures its target but skips the
+  `try_compile` probes. A configure-time speedup; if a sub-repo picks up
+  the wrong MPI, look at the bundle-level call first.
+- `mpas` pins **TAG v8.4.2** (bumped 2026-09, PR #160; previously
+  v8.4.0 from PR #145). If a local
+  `jedi-bundle/mpas` checkout is older, `git fetch && git checkout v8.4.2`
   before rebuilding.
 - `BUILD_MPAS` was briefly made default-OFF (PR #136) but is **ON** in the
   current `CMakeLists.txt` — always check the file, not memory.

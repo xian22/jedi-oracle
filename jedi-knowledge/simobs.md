@@ -80,6 +80,9 @@ are imported by EWOK's plotting and evaluation runtime tasks, and whose
 
 ## Gotchas
 
+- **Empty-satellite crash fixed (2026-09, simobs#410):** `write_summary`
+  in `src/simobs/plotting/plot_rad_stats.py` raised `IndexError` for
+  satellites with no data in the window.
 - **Plotting and naming updates (2026-09):** longer timeseries now get a
   legible x-axis (simobs#409); GNSSRO writes one logfile per satellite
   (#405); names with gnssro and snake_case qualifiers are accepted (#407);

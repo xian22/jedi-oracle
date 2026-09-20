@@ -139,6 +139,22 @@ This is the largest and most actively-developed JEDI repo by file count.
 
 ## Gotchas
 
+- **ioda-engines removed from UFO's public headers (2026-09, ufo#4367):**
+  the includes moved into the `.cc` files that need them (22 files).
+  Downstream code that picked up ioda-engines transitively through a UFO
+  header now needs its own include. Pairs with the ioda header slimming
+  in `jedi-knowledge/ioda.md`.
+- **New `LocationToObsSpace` ObsFunction (2026-09, ufo#4330):**
+  `src/ufo/filters/obsfunctions/LocationToObsSpace.{h,cc}`, with a
+  `label type` option; test
+  `function_writelocationobsspace.yaml`, fixture from ufo-data#595.
+- **`RecordThresholdRejection` gained `threshold_from_all_locations_in_record`
+  (2026-09, ufo#4339):** default `false`. When true the threshold is
+  computed from every location in the record, and the `where` clause is
+  deliberately ignored for that computation — read the test YAML comments
+  in `qc_record_threshold_rejection.yaml` before using it.
+- **Variable Assignment supports `bool` (2026-09, ufo#4353):** from both
+  ObsFunction sources and fixed literals, with safety constraints.
 - **RTTOV wind speed+direction fallback had u/v swapped (2026-09,
   ufo#4312):** the fallback that decomposes wind speed + direction
   GeoVaLs into components used `u = w*cos(wdir)`, `v = w*sin(wdir)`.
