@@ -138,6 +138,11 @@ and outputs, with simobs rendering the results.
   reuse per app context and compound item lookup per experiment. See
   `jedi-knowledge/r2d2.md`.
 
+- **Node exclusivity and ERA5 ensemble (2026-09, skylab#999/#991,
+  ewok#1322/#1315).** `exclusive_nodes: True` requests whole nodes on
+  Slurm and PBS; ERA5 ensemble ingest feeds MPAS analysis experiments.
+  Both are paired skylab + ewok changes, so update the two together.
+
 ## Further reading
 
 - https://jedi-docs.jcsda.org/ → Inside JEDI → Skylab.

@@ -26,6 +26,9 @@ The bundle clones it `RECURSIVE`, so submodules come along.
 
 ## Gotchas
 
+- **Skylab background/ensemble scripts (2026-09, pyiri-jedi#173):**
+  scripts to build the background and ensemble inputs for Skylab
+  experiments.
 - **numpy 2.0 compatibility (2026-09, pyiri-jedi#199):** fixes in the
   Python layer for numpy 2.x. If you hit numpy API errors, make sure this
   commit is in your checkout.

@@ -94,6 +94,9 @@ There is no `source/` subdirectory — `.rst` files live directly under
 
 ## Gotchas
 
+- **Recent pages (2026-09):** bool Variable Assignment (jedi-docs#1102),
+  StdDev updates (#1105), and a fix to the Arithmetic ObsFunction example
+  (#1107).
 - **New pages (2026-09):** `saber/blocks/BUMP_nicas_estimation.rst`
   (BUMP HDIAG, jedi-docs#1085) and
   `ufo/qcfilters/obsfunctions/PotentialTemperatureFromTemperature.rst`

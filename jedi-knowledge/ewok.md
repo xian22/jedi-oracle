@@ -133,6 +133,11 @@ platforms) per the JEDI Knowledge Base notes linked in the README.
 
 ## Gotchas
 
+- **cylc: abort on timeout, not on stall (2026-09, ewok#1320):** cylc
+  experiments no longer abort when the workflow stalls; they abort on
+  timeout instead. ObsBias files are now published (ewok#1319), and the
+  `exclusive_nodes` option is implemented here (ewok#1322, see
+  `jedi-knowledge/skylab.md`).
 - The required env vars are not optional. Missing any one of them fails
   experiment creation in confusing ways.
 - ecFlow server-side and client-side hostnames must match — when the UI

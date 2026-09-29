@@ -130,6 +130,10 @@ from this repo (#1488).
 
 ## Gotchas
 
+- **`f10m` computed when missing (2026-09, fv3-jedi#1551):**
+  `model2geovals` now calculates the 10 m wind factor from wind speed if it
+  isn't already in the state, guarding against a zero denominator. This
+  affects operators that consume near-surface wind GeoVaLs.
 - The build is sensitive to FMS / Atlas / OOPS versions — bumping any
   of these often requires fv3-jedi changes too (the `>=` pins are
   conservative, not aspirational).
