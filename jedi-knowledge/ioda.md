@@ -153,6 +153,17 @@ The library provides:
 
 ## Gotchas
 
+- **Empty input files keep their schema under OSDF (2026-09, ioda#1896):**
+  a zero-location input file now keeps its variables when read into an
+  OSDF container, so downstream code no longer fails on an empty obs
+  space. Fixture in ioda-data#261. Related: OSDF `put_db` can no longer
+  create both a sliced and a non-sliced variable with clashing names
+  (ioda#1897).
+- **`Identity` distribution indexing changed (2026-09, ioda#1900):** it
+  now indexes locations the same way as the other distributions. Tests or
+  diagnostics that relied on its old indexing may shift.
+- **netCDF linked `PRIVATE` (2026-09, ioda#1898):** targets that only got
+  netCDF transitively through ioda must now link it themselves.
 - **OSDF reader can read a set of input files (2026-09, ioda#1888):**
   the container-based reader now handles multiple input files via the
   existing plural `obsdatain.engine.obsfiles` key — no new YAML option.

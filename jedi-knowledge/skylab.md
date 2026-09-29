@@ -104,6 +104,18 @@ siblings — i.e. `jedi-workflow/` in this oracle layout.
 
 ## Gotchas
 
+- **`exclusive_nodes: True` (2026-09, skylab#999, ewok#1322):** set in
+  the experiment YAML to request whole compute nodes — `#SBATCH --exclusive`
+  on Slurm, `#PBS -l place=scatter:excl` on PBS. Works under both cylc and
+  ecflow; login-node tasks are unaffected. Off by default. Useful when
+  sharing a node slows tasks down or causes MPI placement problems.
+- **NOAA aircraft bias-correction files are not on NODD (since
+  2026-02, skylab#998):** the GDAS ingest YAMLs comment out the obs-bias
+  inputs and cold-start obs bias instead. Expect this if an experiment
+  can't find aircraft bias coefficients.
+- **ERA5 ensemble ingest for MPAS (2026-09, skylab#991):**
+  `models/mpas/ingest/era5_ensemble.yaml`, used by
+  `experiments/mpas-analysis.yaml`.
 - **ERA5 can now be ingested via CDS API / MARS (2026-09, skylab#972):**
   `models/mpas/tasks/runFetchBackgroundMPAS-cdsapi.py` (625 lines) adds a
   second ERA5 route for MPAS alongside the existing OSDF-hosted pull from

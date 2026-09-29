@@ -139,6 +139,16 @@ This is the largest and most actively-developed JEDI repo by file count.
 
 ## Gotchas
 
+- **`AodMassFraction` has a linear operator (2026-09, ufo#4152):**
+  `operators/aerosols/AODMassFraction/ObsAodMassFractionTLAD.{h,cc}`,
+  registered as `AodMassFraction`, so the operator can now be used in
+  variational DA. The maths is in jedi-docs (jedi-docs#1079).
+- **`model extinction units coeff` (2026-09, ufo#4360):** a multiplicative
+  factor (default 1) on the model extinction GeoVaL, e.g. `1000` to
+  convert km⁻¹ to m⁻¹.
+- **AOD CRTM skips bad profiles (2026-09, ufo#4375 with crtm `a383119`)**
+  in TL, AD and AOD_K. Bias-correction predictors now check for missing
+  input values (ufo#4323, fixtures in ufo-data#593).
 - **ioda-engines removed from UFO's public headers (2026-09, ufo#4367):**
   the includes moved into the `.cc` files that need them (22 files).
   Downstream code that picked up ioda-engines transitively through a UFO

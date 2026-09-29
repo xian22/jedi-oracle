@@ -151,6 +151,27 @@ response) without needing a full atmospheric model.
 
 ## Gotchas
 
+- **`time covariance` renamed and now validated (2026-09, saber#1278):**
+  in `blocks/ParametricBlockChain.h` the default changed from
+  `multivariate duplicated` to `duplicated`, and only `univariate` or
+  `duplicated` are accepted. Before this, any value other than
+  `multivariate duplicated` silently meant univariate. Now the old
+  spelling throws `Wrong time covariance type`, so 4-D configurations
+  that set it explicitly need updating. The time-communicator rank and
+  size are also injected into block configurations, for per-time-slot
+  output files.
+- **StdDev `scale factor` (2026-09, saber#1319):** a multiplicative
+  factor on the StdDev block (default 1.0, must be > 0), applied per
+  variable when stddev is read from file. Test `dirac_stddev_5`.
+- **`GeographicalMask` smoothing is not on develop yet.** In
+  `generic/GeographicalMask.cc` the weight smoothing is still a `TODO`.
+  It arrives with saber#1310 (open as of 2026-09-29), which adds a
+  `filter:` key taking any outer block chain, adds ATLAS reader/writer
+  support and a `mask levels` option — and **renames the file keys**:
+  `input mask file` becomes `input mask model file` /
+  `input mask atlas file`, and likewise for `input weight file` and
+  `output weight file`. Check which of these a configuration needs
+  against the saber version in use.
 - **SABER classes renamed (2026-09, saber#1288):** the `Saber` prefix
   was dropped from class and file names, since they already live in
   `namespace saber`. `SaberOuterBlockBase` → `OuterBlockBase`,

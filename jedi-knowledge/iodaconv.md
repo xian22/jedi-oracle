@@ -28,6 +28,8 @@ sondes, etc.) into that IODA layout.
 
 ## Gotchas
 
+- **numpy 2.0 compatibility (2026-09, iodaconv#1816).** Also: the
+  converter script now saves values into one variable (#1812).
 - **OSW converter updated for the NOAA-L2 Muon product (2026-09,
   iodaconv#1810):** `src/hdf5/osw_2ioda.py`.
 - Many converters depend on external libraries (NCEPbufr, eccodes)
