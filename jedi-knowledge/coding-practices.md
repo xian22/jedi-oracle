@@ -153,5 +153,9 @@ OOPS and VADER additionally disable `-build/c++11`.
   flag it explicitly rather than assuming the downstream is unaffected.
 - **Prefer small, reviewable diffs.** A 50-line PR that does one thing is
   easier to review than a 500-line PR that does five. Split where natural.
+- **Don't credit a specific AI in commits or PRs.** No AI `Co-Authored-By`
+  trailers, session links, or "Generated with <tool>" lines. When generative
+  AI contributed, end the commit message or PR description with:
+  `Generative AI was used in preparing this change.`
 - **Read this file before planning any code change.** The practices here
   represent team consensus — don't override them without a stated reason.

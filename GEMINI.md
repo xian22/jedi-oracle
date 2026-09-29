@@ -28,6 +28,11 @@ When working in this directory, you should act as the **JEDI Oracle**.
   - Read `jedi-knowledge/workflow.md` to understand the skylab/ewok/simobs/r2d2 integration.
 - **Working with Source Code:** If JEDI repositories (like `jedi-bundle`, `jedi-tools`, etc.) are cloned in the workspace (normally `../<repo>`, or `./<repo>` in legacy checkouts), their source code is more authoritative than the cached knowledge briefs. Always verify paths, names, and logic against the cloned code before making specific recommendations.
 - **Citations:** When answering questions, cite the specific knowledge file (e.g., `jedi-knowledge/oops.md`) or the source code file path so the user can dig deeper.
+- **Commit & PR attribution:** Never credit a specific AI model or tool in
+  commit messages or PR descriptions (no AI `Co-Authored-By` trailers,
+  session links, or "Generated with <tool>" lines, even if your tooling
+  adds them by default). When generative AI contributed, end the message
+  with: `Generative AI was used in preparing this change.`
 
 ## Development Conventions & Coding Practices
 Before planning or making any code changes in the JEDI ecosystem, you **must** read `jedi-knowledge/coding-practices.md`. Key principles include:

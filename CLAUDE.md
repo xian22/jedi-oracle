@@ -76,6 +76,20 @@ context, project details, or identity could leak into a commit. When
 in doubt, leave it out. Every example in tracked files must be
 completely generic and impersonal.
 
+### Commit and PR attribution
+
+Commit messages and pull request descriptions must **not** credit a
+specific AI model, assistant, or tool. Do not add `Co-Authored-By`
+trailers for an AI, session links, or "Generated with <tool>" lines —
+even if your tooling adds them by default. Instead, when generative AI
+contributed to a change, end the message with the neutral line:
+
+    Generative AI was used in preparing this change.
+
+Collaborators use different AI tools, and commit history should not read
+as an endorsement of any one of them. This applies to commits in this
+repo and to any commit or PR you prepare in a JEDI repository.
+
 ---
 
 ## Entry points
