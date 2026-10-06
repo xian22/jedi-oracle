@@ -143,6 +143,10 @@ and outputs, with simobs rendering the results.
   Slurm and PBS; ERA5 ensemble ingest feeds MPAS analysis experiments.
   Both are paired skylab + ewok changes, so update the two together.
 
+- **r2d2 orphan-safe delete/deregister (2026-10, r2d2#862 +
+  r2d2-client#120).** Paired server/client change — update both. See
+  `jedi-knowledge/r2d2.md`.
+
 ## Further reading
 
 - https://jedi-docs.jcsda.org/ → Inside JEDI → Skylab.

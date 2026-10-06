@@ -94,6 +94,12 @@ There is no `source/` subdirectory — `.rst` files live directly under
 
 ## Gotchas
 
+- **GeographicalMask page (merged 2026-09, jedi-docs#1099) is ahead of
+  the code.** `saber/blocks/GeographicalMask.rst` says filtering can
+  smooth the mask edges. On saber develop that's still a `TODO`: it
+  arrives with saber#1310, which also renames the file keys the page's
+  example uses. Verify against `src/saber/generic/GeographicalMask.h`
+  before copying the example.
 - **Recent pages (2026-09):** bool Variable Assignment (jedi-docs#1102),
   StdDev updates (#1105), and a fix to the Arithmetic ObsFunction example
   (#1107).

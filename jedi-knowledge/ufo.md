@@ -139,6 +139,20 @@ This is the largest and most actively-developed JEDI repo by file count.
 
 ## Gotchas
 
+- **RTTOV dropped half of each scan line for signed zenith angles
+  (fixed 2026-10, ufo#4303):** GSI/ncdiag-derived obs streams sign
+  `sensorZenithAngle` by scan side. RTTOV's `rttov_check_profiles`
+  rejected the negative values as "invalid zenith angle" and silently
+  discarded those profiles. The interface now takes the absolute value
+  (v12 and v14 utils), as the CRTM interface already did. RTTOV runs on
+  such data before this fix used about half the observations they should
+  have.
+- **Surface-corrected Ps/T for land and marine (2026-10, ufo#4321):**
+  virtual temperature is computed rather than expected as an input ob.
+  New configurable names in `ObsSfcCorrectedParameters` —
+  `observed temperature variable`, `observed specific humidity variable`,
+  and the station-height variable — with matching flexibility in
+  `ObsErrorFactorSfcPressure` and `ModelHeightAdjustedAirTemperature`.
 - **`AodMassFraction` has a linear operator (2026-09, ufo#4152):**
   `operators/aerosols/AODMassFraction/ObsAodMassFractionTLAD.{h,cc}`,
   registered as `AodMassFraction`, so the operator can now be used in

@@ -43,15 +43,19 @@ the default cookbook in YAML.
     `oops::Variable → [RecipeName, ...]`. Glance at this to see what is
     offered out-of-the-box.
   - `VaderParameters.h` — YAML configuration schema.
-  - `recipes/` — atmosphere/microphysics/marine recipes (~105 files):
+  - `recipes/` — atmosphere/microphysics recipes (~114 files):
     `AirTemperature_*.cc`, `AirPotentialTemperature_*.cc`,
     `AirPressure*`, `Cloud*MixingRatio*`, `WaterVapor*`,
     `Geopotential*`, `HydrostaticExnerLevels`, `EastwardWindAt10m` /
     `NorthwardWindAt10m` / `WindReductionFactorAt10m`,
-    `ParticulateMatter2p5`, `SeaWaterTemperature` /
-    `SeaWaterPotentialTemperature` (gsw-gated), etc. Multiple variants
-    per output variable (suffix `_A`, `_B`, `_C`) take different input
-    combinations.
+    `ParticulateMatter2p5`, etc. Multiple variants per output variable
+    (suffix `_A`, `_B`, `_C`) take different input combinations.
+  - `betaNames_CRTMRecipes/` — a second recipe directory (~77 files) for
+    the variables CRTM consumes (hydrometeor layer mass contents,
+    effective radii, surface fractions, surface winds, …) and the marine
+    temperature recipes `SeaWaterTemperature` /
+    `SeaWaterPotentialTemperature` (gsw-gated). Check here as well as
+    `recipes/` before writing a new recipe.
 - `src/mo/` — Met Office–contributed atmospheric recipes and helper code
   (`eval_air_density`, `eval_air_temperature`, `eval_exner`,
   `eval_hydrostatic_balance`, `eval_moisture_incrementing_operator`,
@@ -109,6 +113,11 @@ the default cookbook in YAML.
 
 ## Gotchas
 
+- **Marine temperature linear variable change (2026-10, vader#208):**
+  `betaNames_CRTMRecipes/SeaWaterTemperature_B.cc` adds TL/AD for marine
+  in-situ ↔ potential temperature, and the marine temperature recipes
+  moved from `recipes/` into `betaNames_CRTMRecipes/`. Test data in
+  jedi-model-data#12.
 - VADER works on Atlas `FieldSet`s using `oops::Variable` names. The
   variable name string must match what other JEDI components expect —
   variable-name drift is a frequent debugging cause.

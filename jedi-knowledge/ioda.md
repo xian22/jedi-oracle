@@ -153,6 +153,9 @@ The library provides:
 
 ## Gotchas
 
+- **Python is semi-optional (2026-10, ioda#1903):** the `pyiodautils`
+  build and the Python tests are no longer hard requirements, which
+  helps on systems without a full Python stack.
 - **Empty input files keep their schema under OSDF (2026-09, ioda#1896):**
   a zero-location input file now keeps its variables when read into an
   OSDF container, so downstream code no longer fails on an empty obs
