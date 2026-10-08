@@ -45,6 +45,36 @@ This file is tracked. Open a PR to contribute.
   it — after the bundle moves the pin, re-checkout the new tag by hand
   (`git -C jedi-bundle/MPAS fetch && git -C jedi-bundle/MPAS checkout vX.Y.Z`).
   See `jedi-knowledge/mpas.md`.
+- **Jobs inherit the ecFlow *server's* environment, not your shell's.** ewok's
+  ecFlow task scripts load no modules; the server submits each job with
+  `sbatch` and Slurm exports the server's environment (`--export=ALL`) into
+  it. So the environment a task runs in is whatever the ecFlow server was
+  *started* with, regardless of what is loaded in the shell where you run
+  `ecflow_client`.
+  - **The server is shared across your shells.** The ecFlow start script
+    usually derives the port from your user ID, so every shell you open on
+    that login node — including one set up for an unrelated project —
+    talks to the same server unless `ECF_PORT` is set explicitly. If any of
+    them (re)starts the server with a different module stack, every job
+    submitted afterwards, in every experiment, gets that stack.
+  - **Symptom:** a task that ran fine earlier fails within seconds after a
+    requeue, on every rank, with a dynamic-linker error rather than a JEDI
+    error, e.g.
+    `mpasjedi_hofx.x: symbol lookup error: .../libectrans_common.so: undefined symbol: __libm_sc_tbl`
+    (`__libm_sc_tbl` is in the Intel compiler runtime, `libimf`) and exit
+    code 127. The task's job script and YAML are unchanged; only the
+    environment it inherited is.
+  - **Check:** whether the server was restarted (its start time, from
+    `ecflow_client --stats`) around when the failures began, and what was
+    loaded in the shell that started it. Sourcing an environment in another
+    shell cannot change your current shell's variables, but restarting the
+    shared server from that shell does change every job's environment.
+  - **Fix:** stop the server, load the environment the JEDI build needs, start
+    the server again from that shell, then requeue the failed task. Suite
+    variables set with `ecflow_client --alter` are kept.
+  - **Prevent:** give each project its own server by setting a distinct
+    `ECF_PORT` in each project's environment setup, so starting one project's
+    server can never replace another's.
 
 ## Useful commands
 
