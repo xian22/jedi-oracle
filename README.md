@@ -65,6 +65,10 @@ about the available skills.
 - **`/jedi-investigateIssue`** — search GitHub issues you're involved in by
   keyword, pick one, then pull the full issue with `gh` and produce a
   research report covering the problem and possible solutions.
+- **`/jedi-spackStack`** — build a spack-stack environment on a machine
+  that isn't an officially supported platform (a newer Linux distribution,
+  macOS, a workstation), with the release's CI recipe adapted to
+  your system and the result verified before the long install.
 
 ## Contributing
 

@@ -22,6 +22,7 @@ workspace directory the user owns:
 ├── jedi-docs/
 ├── jedi-tools/
 ├── jedi-workflow/
+├── spack-stack/            ← optional, see /jedi-spackStack
 └── build/                  ← build tree(s)
 ```
 
@@ -163,6 +164,10 @@ that they can run `/jedi-oracle` any time to see the list again:
 - **`/jedi-investigateIssue`** — searches GitHub issues you're involved in
   (across all repos) by keyword, lets you pick one, then pulls it with
   `gh` and produces a research report with possible solutions.
+- **`/jedi-spackStack`** — builds a spack-stack environment on a machine
+  that isn't a supported platform: works out the release and compiler,
+  adapts the release's CI recipe, and verifies the result before the
+  long install.
 
 Also mention that a curated tips file exists: *"There's also a growing tips
 file with build, test, and workflow gotchas — just ask 'any tips on X?' to
@@ -188,6 +193,11 @@ read them before answering. Treat `jedi-knowledge/` as your working library:
   testing, or workflow.** It often contains the exact fix or shortcut the
   user needs. Users can also ask "any tips on X?" to have tips surfaced
   directly.
+- `jedi-knowledge/spack-stack.md` — how spack-stack environments are laid
+  out, how compilers/externals are registered, how the solver picks
+  variants, and release-specific known issues. Read it for any question
+  about building or debugging the software stack; `/jedi-spackStack` is
+  the step-by-step procedure.
 - `jedi-knowledge/coding-practices.md` — team coding standards and AI agent
   guidelines. **Always read this file before planning or making any code
   change.** It covers style enforcement, genericity expectations, PR norms,
@@ -223,6 +233,7 @@ workspace root:
 │   │   ├── jedi-tips.md        ← team tips
 │   │   ├── coding-practices.md ← coding standards and AI agent rules
 │   │   ├── workflow.md         ← skylab/ewok/simobs/r2d2 overview
+│   │   ├── spack-stack.md      ← how spack-stack works + known issues
 │   │   ├── jedi-bundle.md
 │   │   ├── jedi-docs.md
 │   │   ├── jedi-tools.md
@@ -243,6 +254,8 @@ workspace root:
 │   ├── ewok/
 │   ├── simobs/
 │   └── r2d2/
+├── spack-stack/                ← spack-stack checkouts, optional
+│                                 (/jedi-spackStack)
 └── build/                      ← build tree(s), user-managed
 ```
 

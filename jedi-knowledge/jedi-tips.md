@@ -20,6 +20,27 @@ This file is tracked. Open a PR to contribute.
     If the error is a timeout, just rerun the install — spack-stack will pick
     up where it left off. You may need to restart several times, but repeated
     retries will eventually get through.
+  - On an unsupported OS, run `/jedi-spackStack`; background is in
+    `jedi-knowledge/spack-stack.md`.
+  - If the OS's default gcc is a newer major than supported hosts use with
+    your spack-stack release, install the distro's versioned older gcc
+    (C, C++ and Fortran), make it the default, and delete the newer gcc
+    from the env's `site/packages.yaml` after `spack compiler find`.
+  - **Always check variants after concretize.** The solver silently turns
+    off default-on variants rather than use a deprecated dependency
+    version — spack-stack 2.1 `unified-dev` on `linux.default` loses
+    ecflow from `ewok-env` this way. Look for a "deprecated version"
+    warning and check `spack.lock`; force with
+    `packages:ewok-env:require:['+ecflow']`.
+
+- **Load every module before you configure, not just before `make`.**
+  Some components save `PYTHONPATH` at configure time and bake it into
+  build rules and ctest environments (e.g. `pyiri-jedi/test/CMakeLists.txt`).
+  A module loaded later has no effect until you rerun `cmake .` in the
+  build dir. Symptom: `ModuleNotFoundError: No module named
+  'fortranformat'` while generating pyiri test data. Building the bundle
+  against spack-stack needs `py-fortranformat` besides the env modules —
+  `jedi-tools/buildscripts/setup.sh` shows the full list.
 
 ## Running tests
 

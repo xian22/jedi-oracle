@@ -5,6 +5,7 @@ jedi-bundle/
 jedi-docs/
 jedi-tools/
 jedi-workflow/
+spack-stack/
 
 # Build artifacts (legacy in-repo build trees)
 build/

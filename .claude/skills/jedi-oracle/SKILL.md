@@ -63,6 +63,13 @@ This is the right command to suggest when:
      pulls the full issue and discussion with `gh` and writes a report
      covering the problem, what the code shows, and possible solutions.
 
+   - **`/jedi-spackStack`** — *Build spack-stack on an unsupported
+     machine.* Detects the platform, picks the spack-stack release and
+     compiler from jedi-tools' setup scripts, derives prerequisites and
+     settings from that release's CI recipe, and checks the concretized
+     environment (compiler, MPI, duplicates, silently dropped variants)
+     before handing over the long `spack install`.
+
 4. **Check the workspace state.** Resolve the workspace root per
    CLAUDE.md (`../` in the sibling layout, the oracle root in legacy
    nested checkouts). If `jedi-bundle/`, `jedi-docs/`, `jedi-tools/`, or
