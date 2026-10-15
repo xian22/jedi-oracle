@@ -48,7 +48,8 @@ Gather, without asking where you can detect it:
 - Compilers installed, and **compiler versions the package manager
   offers** (e.g. `apt-cache search --names-only '^gcc-[0-9]+$'`,
   `dnf list 'gcc-toolset-*'`, `brew search gcc llvm`).
-- Whether `module` works in a login shell, and `ulimit -s`.
+- Whether `module` works in a login shell and in an interactive non-login
+  shell (what a desktop terminal opens), and `ulimit -s`.
 
 ### 2. Choose the target
 
@@ -119,12 +120,19 @@ headers, Qt 5 dev packages if the template's ecflow needs `+ui` (check
 local R2D2.
 
 If the chosen compiler is not the OS default, include
-`update-alternatives` (Linux) to make it the default, and tell the user
-how to undo it.
+`update-alternatives` (Linux) to make it the default for `gcc`, `g++` and
+`gfortran` only, and tell the user how to undo it. Do **not** add a `cpp`
+alternative: Debian/Ubuntu already define one named `cpp` (for
+`/lib/cpp`), and installing another breaks `/usr/bin/cpp` (see
+`jedi-knowledge/spack-stack.md`).
 
 Give the user one block to paste. Ask them to log out and back in if
 environment modules were just installed. Then verify: compiler versions,
-`module --version` in a login shell, MySQL if requested.
+`module --version` in a login shell **and** in an interactive non-login
+shell (`bash -ic 'type module'`), MySQL if requested. A desktop terminal
+is a non-login shell; if `module` is missing there, add
+`[ -f /etc/profile.d/modules.sh ] && source /etc/profile.d/modules.sh` to
+the user's `~/.bashrc` (see `jedi-knowledge/spack-stack.md`).
 
 ### 6. Create the environment and register the system
 
@@ -245,6 +253,25 @@ which mpicc python3 ecbuild ecflow_client
 ```
 
 Check that the tools resolve inside the env's `install/` tree, not `/usr`.
+
+**Your own shell may not have working modules.** An agent's command
+shell is typically non-interactive and may start from a snapshot of the
+user's environment. A snapshot can predate the modules setup, or copy
+`module` without its underscore-prefixed helper `_module_raw` (symptom:
+`_module_raw: command not found`, exit 127). The second case was seen
+with a snapshot taken *after* modules worked, so restarting the session
+is not a reliable fix. For every module-dependent command — verification
+above, and any later JEDI configure or build the user asks for — either
+start with `source /etc/profile.d/modules.sh` (re-defines `module` and
+its helpers; path for tcl environment-modules on Linux) or run inside a
+fresh interactive shell, `bash -ic '<commands>'`, which reads
+`~/.bashrc` like a new terminal. Source module scripts directly, never
+through a pipe (`source x.sh | tail` runs in a subshell and the modules
+are lost), and check that a key tool resolves (`command -v ecbuild`)
+before continuing. Never hide the output of a module-loading step
+without such a check: a failed load otherwise surfaces only as a later
+"command not found".
+
 Point the user to `/jedi-getCode` and jedi-docs' build instructions for
 the next step. Mention that to use local R2D2, the MySQL Python client
 comes from pip-installing R2D2, not from the stack.

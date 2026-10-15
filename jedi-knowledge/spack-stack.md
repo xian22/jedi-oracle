@@ -155,6 +155,39 @@ Diagnosing it:
 - `mysql` only matters for running R2D2 locally (`ewok-env +mysql`).
 - `texlive` only matters for building documentation.
 
+## Host prerequisites: two Linux traps
+
+- **`module` missing in a desktop terminal.** Installing
+  `environment-modules` (or lmod) from the distro sets `module` up in
+  `/etc/profile.d/`, which only *login* shells read. Desktop terminals on
+  Ubuntu open interactive non-login shells, which read only `~/.bashrc`,
+  and logging out and back in does not help (shell functions are not
+  inherited). So `bash -lc 'module --version'` works while a new terminal
+  says `module: command not found`. Fix: add
+  `[ -f /etc/profile.d/modules.sh ] && source /etc/profile.d/modules.sh`
+  to `~/.bashrc`. Check with `bash -ic 'type module'`.
+- **Agent shells are a third case.** An AI agent's command shell is
+  usually non-interactive (reads no startup files) and may run from a
+  snapshot of the user's environment. If the snapshot predates the
+  modules setup, or captured `module` without its underscore-prefixed
+  helper (`_module_raw: command not found`), module loads fail even
+  though the user's terminal works. The second case was observed with a
+  snapshot taken after modules worked, so a session restart does not
+  reliably fix it. Start module-dependent commands with
+  `source /etc/profile.d/modules.sh`, or run them as `bash -ic '…'`.
+  Source module scripts directly, not through a pipe — `source x.sh | tail`
+  runs in a subshell and the loaded modules are lost.
+- **Don't make an alternative for `cpp`.** Site READMEs that switch
+  compilers with `update-alternatives` sometimes include `cpp`. On
+  Debian/Ubuntu an alternative named `cpp` already exists (master link
+  `/lib/cpp` → `/usr/bin/cpp`), so
+  `update-alternatives --install /usr/bin/cpp cpp …` leaves
+  `/usr/bin/cpp` → `/etc/alternatives/cpp` → `/usr/bin/cpp`, a loop, and
+  `cpp` stops running. Spack builds don't need the standalone `cpp` to
+  match (compilers preprocess via `gcc -E` / `gfortran -cpp`), so only
+  switch `gcc`, `g++` and `gfortran`. To repair:
+  `sudo rm /usr/bin/cpp && sudo apt install --reinstall cpp && sudo update-alternatives --auto cpp`.
+
 ## Install, rerun, modules
 
 - `ulimit -S -s unlimited` in the build shell first.

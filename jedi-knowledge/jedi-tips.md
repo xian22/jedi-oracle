@@ -41,6 +41,13 @@ This file is tracked. Open a PR to contribute.
   'fortranformat'` while generating pyiri test data. Building the bundle
   against spack-stack needs `py-fortranformat` besides the env modules —
   `jedi-tools/buildscripts/setup.sh` shows the full list.
+  - **The safe bet is to load the full list, even just to build.** Don't
+    trim modules that look workflow-only. Example: `ewok-env` is the
+    stack's source of `py-matplotlib`, and pyiri-jedi's test-data
+    generation imports `PyIRI`, whose `__init__` imports its plotting
+    module. Without `ewok-env` the build fails partway with
+    `ModuleNotFoundError: No module named 'matplotlib'`. Fix: load it,
+    rerun `cmake .`, then `make` again.
 
 ## Running tests
 
