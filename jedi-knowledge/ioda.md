@@ -153,6 +153,12 @@ The library provides:
 
 ## Gotchas
 
+- **Test for the global io pool size (2026-10, ioda#1931):**
+  `ioda_obsspace_io_pool_global_max_size_osdf` (MPI 7) plus `_check` and
+  `_parity` follow-ups exercise the new `observations.max io pool size`
+  setting from oops#3419 (see `jedi-knowledge/oops.md`). They check the
+  io pool size by counting output files: global setting alone gives 3
+  files, and a per-obs-space setting overrides it.
 - **Python is semi-optional (2026-10, ioda#1903):** the `pyiodautils`
   build and the Python tests are no longer hard requirements, which
   helps on systems without a full Python stack.

@@ -151,6 +151,16 @@ response) without needing a full atmospheric model.
 
 ## Gotchas
 
+- **Bi-Fourier domain comes from the grid (2026-10, saber#1339):**
+  `src/saber/bifourier/BifourierSpectralConverter.cc` now takes the domain
+  from `outerGrid.domain().spec()` instead of reading a `domain` config
+  key or rebuilding a rectangular domain with a warning. The old
+  "Configuration does not include domain info" warning is gone.
+- **Parallel ctest fixed (2026-10, saber#1331):** missing
+  `TEST_DEPENDS` added in `test/testlist/saber_bump.cmake` and
+  `saber_spectralb.cmake`, so `ctest -j` no longer races tests that
+  consume another test's output. If you saw intermittent BUMP /
+  spectral-B failures under `ctest -j`, this is the fix.
 - **`time covariance` renamed and now validated (2026-09, saber#1278):**
   in `blocks/ParametricBlockChain.h` the default changed from
   `multivariate duplicated` to `duplicated`, and only `univariate` or

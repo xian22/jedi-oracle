@@ -26,6 +26,15 @@ The bundle clones it `RECURSIVE`, so submodules come along.
 
 ## Gotchas
 
+- **Densities are now in SI units, m⁻³ (2026-10, pyiri-jedi#201):**
+  background/state files store `dene`/`deni` in m⁻³ (previously cm⁻³)
+  and carry a `units = 'm-3'` attribute. `FieldsPyiri::read` asserts the
+  `deni` units attribute is `m-3`, and the Python GeoVaLs writer asserts
+  the same, so **files made before this change fail to load** and must
+  be regenerated. The GeoVaLs writer's `density_unit` default is now
+  `m-3` (`cm-3` still available). The VTEC operator converts to cm⁻³
+  internally before integrating, to avoid overflow. The LETKF test
+  YAMLs were updated to match.
 - **Skylab background/ensemble scripts (2026-09, pyiri-jedi#173):**
   scripts to build the background and ensemble inputs for Skylab
   experiments.

@@ -172,11 +172,13 @@ This is the largest and most actively-developed JEDI repo by file count.
   `src/ufo/filters/obsfunctions/LocationToObsSpace.{h,cc}`, with a
   `label type` option; test
   `function_writelocationobsspace.yaml`, fixture from ufo-data#595.
-- **`RecordThresholdRejection` gained `threshold_from_all_locations_in_record`
-  (2026-09, ufo#4339):** default `false`. When true the threshold is
-  computed from every location in the record, and the `where` clause is
-  deliberately ignored for that computation — read the test YAML comments
-  in `qc_record_threshold_rejection.yaml` before using it.
+- **`Record Threshold Rejection` gained `threshold from all locations in
+  record` (2026-09, ufo#4339):** default `false`. When true the threshold
+  is computed from every location in the record, and the `where` clause is
+  deliberately ignored for that computation (flags are still set only on
+  `where`-selected locations). Worked examples are in jedi-docs
+  `ufo/qcfilters/GenericQC.rst` (jedi-docs#1098) and the test
+  `qc_record_threshold_rejection.yaml`.
 - **Variable Assignment supports `bool` (2026-09, ufo#4353):** from both
   ObsFunction sources and fixed literals, with safety constraints.
 - **RTTOV wind speed+direction fallback had u/v swapped (2026-09,
