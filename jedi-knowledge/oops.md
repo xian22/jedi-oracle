@@ -145,6 +145,37 @@ platform for new algorithms before they are wired into operational models.
 
 ## Gotchas
 
+- **Global `max io pool size` for obs spaces (2026-10, oops#3419):**
+  `observations: max io pool size: N` in the section-level config sets
+  `io pool.max pool size` on every obs space, next to the existing
+  global `obs data container` setting (`applyObsSpaceDefaults` in
+  `src/oops/base/ObsSpaces.h`). A per-obs-space setting still wins;
+  values below 1 throw `Invalid 'max io pool size'`. Tested in ioda
+  (ioda#1931).
+- **Ensemble observers no longer save an `ObsError` group (2026-10,
+  oops#3418):** `LinearEnsembleObservers` and `NonlinearEnsembleObservers`
+  dropped `R_->save("ObsError")`; the matching errors are already written
+  by the observer as `EffectiveError<iteration>`. `LocalEnsembleSolver`
+  reloads them with the new `ObsErrors::read("EffectiveError0")`. Scripts
+  that read `ObsError` from LETKF/GETKF output to get the post-QC errors
+  should read `EffectiveError0` instead.
+- **`LocalInterpolator::apply` must leave masked-out targets untouched
+  (2026-10, oops#3397):** documented in
+  `src/oops/interface/LocalInterpolator.h` and enforced by a new generic
+  test in `src/test/generic/LocalInterpolator.h`. `apply` accumulates into
+  the buffer; `GetValues` relies on this when obs span several time
+  sub-windows. A model interpolator that writes every target (even with
+  missing values) silently loses observations and shows up as a wrong
+  cost function, not a failure. Model interfaces may now fail this test.
+- **`NormScalar` removed (2026-10, oops#3422):**
+  `src/oops/generic/NormScalar.h` is gone; no remaining users in the
+  bundle.
+- **`FieldSet3D::axpy` and `util::axpyFieldSet` added (2026-10,
+  oops#3385)** in `src/oops/base/FieldSet3D.h` and
+  `src/oops/util/FieldSetOperations.h`.
+- **`DFSCalculator.h` now installed (2026-10, oops#3412):** it was
+  missing from `src/CMakeLists.txt`, so downstream builds against an
+  installed oops could not include it.
 - **`oops::Log::warning()` is now prefixed `OOPS_WARNING` (2026-09,
   oops#3341).** Log-scraping scripts that matched the old unprefixed
   warning lines need updating.

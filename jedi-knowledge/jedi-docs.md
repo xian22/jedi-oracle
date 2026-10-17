@@ -94,6 +94,11 @@ There is no `source/` subdirectory — `.rst` files live directly under
 
 ## Gotchas
 
+- **Recent pages (2026-10):** Record Threshold Rejection now documents
+  `threshold from all locations in record` with worked examples
+  (`ufo/qcfilters/GenericQC.rst`, jedi-docs#1098), and the SABER
+  `calibration_writeVariances` page lists octahedral Gaussian meshes as
+  supported (jedi-docs#1114).
 - **GeographicalMask page (merged 2026-09, jedi-docs#1099) is ahead of
   the code.** `saber/blocks/GeographicalMask.rst` says filtering can
   smooth the mask edges. On saber develop that's still a `TODO`: it
